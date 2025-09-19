@@ -11,19 +11,21 @@ namespace Pedidos_Yo.Models
         public int ClienteId { get; set; }
 
         [Required(ErrorMessage = "La fecha del pedido es obligatoria.")]
-        [DataType(DataType.DateTime, ErrorMessage = "La fecha del pedido debe ser una fecha válida.")]
+        [DataType(DataType.DateTime, ErrorMessage = "La fecha debe ser válida.")]
         public DateTime Fecha { get; set; } = DateTime.Now;
 
-        [Required(ErrorMessage = "El estado del pedido es obligatorio.")]
+        [Required(ErrorMessage = "El estado es obligatorio.")]
+        [StringLength(20, ErrorMessage = "El estado no puede exceder los 20 caracteres.")]
         [RegularExpression("Pendiente|Procesado|Enviado|Entregado", ErrorMessage = "El estado debe ser Pendiente, Procesado, Enviado o Entregado.")]
         public string Estado { get; set; } = "Pendiente";
 
         [Required(ErrorMessage = "El total es obligatorio.")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "El total debe ser mayor a cero.")]
+        [Range(0.01, 9999999.99, ErrorMessage = "El total debe ser mayor a cero y razonable.")]
         public decimal Total { get; set; }
 
         // Relaciones
         public UserModel Cliente { get; set; }
-        public List<OrderItemModel> Items { get; set; } = new List<OrderItemModel>();
+        public ICollection<OrderItemModel> Items { get; set; } = new List<OrderItemModel>();
     }
+
 }

@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Pedidos_Yo.Data;
 using Pedidos_Yo.Models;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Pedidos_Yo.Controllers
 {
+    [Authorize(Roles = "Admin,Cliente,Empleado")]
     public class ProductController : Controller
     {
         private readonly Pedidos_YoDBContext _context;
@@ -19,13 +20,47 @@ namespace Pedidos_Yo.Controllers
             _context = context;
         }
 
-        // GET: Product
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchName = null, decimal? minPrice = null, decimal? maxPrice = null, int page = 1, int itemsPerPage = 10)
         {
-            return View(await _context.Products.ToListAsync());
+            var query = _context.Products.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchName))
+            {
+                query = query.Where(p => p.Nombre.Contains(searchName));
+            }
+
+            if (minPrice.HasValue)
+            {
+                query = query.Where(p => p.Precio >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(p => p.Precio <= maxPrice.Value);
+            }
+
+            var totalItems = await query.CountAsync();
+            var products = await query
+                .OrderBy(p => p.Nombre)
+                .Skip((page - 1) * itemsPerPage)
+                .Take(itemsPerPage)
+                .ToListAsync();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling(totalItems / (double)itemsPerPage);
+            ViewBag.ItemsPerPage = itemsPerPage;
+            ViewBag.SearchName = searchName;
+            ViewBag.MinPrice = minPrice;
+            ViewBag.MaxPrice = maxPrice;
+
+            if (User.IsInRole("Cliente"))
+            {
+                ViewData["Layout"] = "~/Views/Shared/_LayoutCliente.cshtml";
+            }
+
+            return View(products);
         }
 
-        // GET: Product/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,18 +75,21 @@ namespace Pedidos_Yo.Controllers
                 return NotFound();
             }
 
+            if (User.IsInRole("Cliente"))
+            {
+                ViewData["Layout"] = "~/Views/Shared/_LayoutCliente.cshtml";
+            }
+
             return View(productModel);
         }
 
-        // GET: Product/Create
+        [Authorize(Roles = "Admin,Empleado")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Product/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,Empleado")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Nombre,Descripcion,Precio,Stock")] ProductModel productModel)
@@ -65,7 +103,7 @@ namespace Pedidos_Yo.Controllers
             return View(productModel);
         }
 
-        // GET: Product/Edit/5
+        [Authorize(Roles = "Admin,Empleado")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,9 +119,7 @@ namespace Pedidos_Yo.Controllers
             return View(productModel);
         }
 
-        // POST: Product/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,Empleado")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Precio,Stock")] ProductModel productModel)
@@ -116,7 +152,7 @@ namespace Pedidos_Yo.Controllers
             return View(productModel);
         }
 
-        // GET: Product/Delete/5
+        [Authorize(Roles = "Admin,Empleado")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,7 +170,7 @@ namespace Pedidos_Yo.Controllers
             return View(productModel);
         }
 
-        // POST: Product/Delete/5
+        [Authorize(Roles = "Admin,Empleado")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

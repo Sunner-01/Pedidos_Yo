@@ -1,49 +1,49 @@
 ﻿@model Pedidos_Yo.Models.OrderModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Pedido";
+    ViewData["Layout"] = User.IsInRole("Cliente") ? "~/Views/Shared/_LayoutCliente.cshtml" : "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
-
-<h4>OrderModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="ClienteId" class="control-label"></label>
-                <select asp-for="ClienteId" class="form-control" asp-items="ViewBag.ClienteId"></select>
-                <span asp-validation-for="ClienteId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Fecha" class="control-label"></label>
-                <input asp-for="Fecha" class="form-control" />
-                <span asp-validation-for="Fecha" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Estado" class="control-label"></label>
-                <input asp-for="Estado" class="form-control" />
-                <span asp-validation-for="Estado" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Total" class="control-label"></label>
-                <input asp-for="Total" class="form-control" />
-                <span asp-validation-for="Total" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="container mt-5">
+    <h1 class="text-neon text-center mb-4">Editar Pedido</h1>
+    <div class="card card-gamer">
+        <div class="card-body">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                @if (!User.IsInRole("Cliente"))
+                {
+                    <div class="form-group">
+                        <label asp-for="ClienteId" class="control-label">Cliente</label>
+                        <select asp-for="ClienteId" class="form-control form-control-gamer" asp-items="ViewBag.ClienteId"></select>
+                        <span asp-validation-for="ClienteId" class="text-danger"></span>
+                    </div>
+                }
+                <div class="form-group">
+                    <label class="control-label">Producto</label>
+                    <select name="ItemProductId" class="form-control form-control-gamer" asp-items="ViewBag.Productos" id="ItemProductId"></select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Cantidad</label>
+                    <input name="ItemCantidad" class="form-control form-control-gamer" type="number" min="1" value="@(Model.Items.FirstOrDefault()?.Cantidad ?? 1)" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Guardar" class="btn btn-gamer" />
+                    <a asp-action="Index" class="btn btn-secondary">Volver</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            document.getElementById('ItemProductId').value = '@(Model.Items.FirstOrDefault()?.ProductId ?? 0)';
+        });
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

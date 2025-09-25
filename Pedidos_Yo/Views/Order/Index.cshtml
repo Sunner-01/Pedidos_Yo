@@ -1,53 +1,80 @@
 ﻿@model IEnumerable<Pedidos_Yo.Models.OrderModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Mis Pedidos";
+    ViewData["Layout"] = User.IsInRole("Cliente") ? "~/Views/Shared/_LayoutCliente.cshtml" : "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<div class="container-fluid mt-5">
+    <h1 class="text-neon text-center mb-4">Mis Pedidos</h1>
+    <form asp-action="Index" method="get" class="mb-4 row justify-content-center">
+        <div class="col-md-3">
+            <select name="itemsPerPage" id="itemsPerPage" class="form-control form-control-gamer" onchange="this.form.submit()">
+                <option value="5">5 por página</option>
+                <option value="10">10 por página</option>
+                <option value="20">20 por página</option>
+            </select>
+        </div>
+    </form>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Fecha)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Total)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cliente)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fecha)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Total)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cliente.Email)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+    <div class="card card-wide">
+        <div class="card-body">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Total</th>
+                        <th>Productos</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Fecha.ToString("dd/MM/yyyy")</td>
+                            <td>@item.Estado</td>
+                            <td>@item.Total</td>
+                            <td>
+                                @foreach (var orderItem in item.Items)
+                                {
+                                    <span>@orderItem.Product.Nombre (x@orderItem.Cantidad)</span>
+                            
+                                    <br />
+                                }
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-gamer">Detalles</a>
+                                @if (item.Estado == "Pendiente" && User.IsInRole("Cliente"))
+                                {
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-gamer">Editar</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Cancelar</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <nav aria-label="Paginación">
+                <ul class="pagination justify-content-center">
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                            <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-itemsPerPage="@ViewBag.ItemsPerPage">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            document.getElementById('itemsPerPage').value = '@ViewBag.ItemsPerPage';
+        });
+    </script>
 }
-    </tbody>
-</table>

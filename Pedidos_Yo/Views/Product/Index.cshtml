@@ -1,53 +1,91 @@
 ﻿@model IEnumerable<Pedidos_Yo.Models.ProductModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Productos";
+    ViewData["Layout"] = User.IsInRole("Cliente") ? "~/Views/Shared/_LayoutCliente.cshtml" : "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<div class="container-fluid mt-5">
+    <h1 class="text-neon text-center mb-4">Productos Disponibles</h1>
+    <form asp-action="Index" method="get" class="mb-4 row justify-content-center">
+        <div class="col-md-3">
+            <input type="text" name="searchName" value="@ViewBag.SearchName" placeholder="Buscar por nombre" class="form-control form-control-gamer" />
+        </div>
+        <div class="col-md-2">
+            <input type="number" name="minPrice" value="@ViewBag.MinPrice" placeholder="Precio min" class="form-control form-control-gamer" step="0.01" />
+        </div>
+        <div class="col-md-2">
+            <input type="number" name="maxPrice" value="@ViewBag.MaxPrice" placeholder="Precio max" class="form-control form-control-gamer" step="0.01" />
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-gamer">Filtrar</button>
+        </div>
+    </form>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Precio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Stock)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Precio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Stock)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+    <form asp-action="Index" method="get" class="mb-4 row justify-content-center">
+        <input type="hidden" name="searchName" value="@ViewBag.SearchName" />
+        <input type="hidden" name="minPrice" value="@ViewBag.MinPrice" />
+        <input type="hidden" name="maxPrice" value="@ViewBag.MaxPrice" />
+        <div class="col-md-3">
+            <select name="itemsPerPage" id="itemsPerPage" class="form-control form-control-gamer" onchange="this.form.submit()">
+                <option value="5">5 por página</option>
+                <option value="10">10 por página</option>
+                <option value="20">20 por página</option>
+            </select>
+        </div>
+    </form>
+
+    <div class="card card-wide">
+        <div class="card-body">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Nombre</td>
+                            <td>@item.Descripcion</td>
+                            <td>@item.Precio</td>
+                            <td>@item.Stock</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-gamer">Detalles</a>
+                                @if (User.IsInRole("Admin") || User.IsInRole("Empleado"))
+                                {
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-gamer">Editar</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <nav aria-label="Paginación">
+                <ul class="pagination justify-content-center">
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                            <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-itemsPerPage="@ViewBag.ItemsPerPage" asp-route-searchName="@ViewBag.SearchName" asp-route-minPrice="@ViewBag.MinPrice" asp-route-maxPrice="@ViewBag.MaxPrice">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            document.getElementById('itemsPerPage').value = '@ViewBag.ItemsPerPage';
+        });
+    </script>
 }
-    </tbody>
-</table>

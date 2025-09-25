@@ -1,49 +1,88 @@
 ﻿@model Pedidos_Yo.Models.UserModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
-
-<h4>UserModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
+<div class="container mt-5">
+    <h1 class="text-neon-admin text-center mb-4">Editar Usuario</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card card-gamer-form">
+                <div class="card-body p-4">
+                    <form id="userForm" asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger-gamer text-center mb-3"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <div class="mb-3">
+                            <label asp-for="Nombre" class="form-label text-white">Nombre</label>
+                            <input asp-for="Nombre" class="form-control form-control-gamer" />
+                            <span asp-validation-for="Nombre" class="text-danger-gamer"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label text-white">Correo Electrónico</label>
+                            <input asp-for="Email" class="form-control form-control-gamer" />
+                            <span asp-validation-for="Email" class="text-danger-gamer"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label text-white">Contraseña</label>
+                            <input asp-for="Password" class="form-control form-control-gamer" type="password" />
+                            <span asp-validation-for="Password" class="text-danger-gamer"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Rol" class="form-label text-white">Rol</label>
+                            <select asp-for="Rol" class="form-control form-control-gamer">
+                                <option value="">Seleccione un rol</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Cliente">Cliente</option>
+                                <option value="Empleado">Empleado</option>
+                            </select>
+                            <span asp-validation-for="Rol" class="text-danger-gamer"></span>
+                        </div>
+                        <div class="mb-3">
+                            <input type="submit" value="Guardar" class="btn btn-gamer btn-block" />
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Rol" class="control-label"></label>
-                <input asp-for="Rol" class="form-control" />
-                <span asp-validation-for="Rol" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="container mt-3">
+    <a asp-action="Index" class="text-neon-admin">Volver al Listado</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $("#userForm").validate({
+                rules: {
+                    Nombre: { required: true, minlength: 2, maxlength: 100 },
+                    Email: { required: true, email: true, maxlength: 150 },
+                    Password: { required: true, minlength: 6, maxlength: 100 },
+                    Rol: { required: true }
+                },
+                messages: {
+                    Nombre: {
+                        required: "El nombre es obligatorio.",
+                        minlength: "El nombre debe tener al menos 2 caracteres.",
+                        maxlength: "El nombre no puede exceder 100 caracteres."
+                    },
+                    Email: {
+                        required: "El correo es obligatorio.",
+                        email: "Ingrese un correo válido.",
+                        maxlength: "El correo no puede exceder 150 caracteres."
+                    },
+                    Password: {
+                        required: "La contraseña es obligatoria.",
+                        minlength: "La contraseña debe tener al menos 6 caracteres.",
+                        maxlength: "La contraseña no puede exceder 100 caracteres."
+                    },
+                    Rol: "Seleccione un rol."
+                }
+            });
+        });
+    </script>
 }

@@ -20,3 +20,251 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+
+
+
+
+    /* Estilo Gamer para Login */
+    body.bg-gamer {
+        background: linear-gradient(135deg, #00DDEB 0%, #9B59B6 100%);
+        background-size: 200% 200%;
+        animation: gradientAnimation 10s ease infinite;
+        color: #ffffff;
+        font-family: 'Orbitron', sans-serif;
+    }
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.card-gamer {
+    background: rgba(26, 26, 26, 0.8);
+    border: 2px solid #00DDEB;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 221, 235, 0.5);
+    backdrop-filter: blur(5px);
+    width: 500px;
+}
+
+.form-control-gamer {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #5D6D7E;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+    .form-control-gamer:focus {
+        border-color: #00DDEB;
+        box-shadow: 0 0 10px rgba(0, 221, 235, 0.7);
+        background: rgba(255, 255, 255, 0.2);
+        color:white;
+        font-weight:600;
+    }
+
+    .form-control-gamer::placeholder {
+        color: #bdc3c7;
+        opacity: 0.7;
+        font-weight:900;
+    }
+
+.input-group-text {
+    background: #2C2C2C;
+    color: white;
+    border: 1px solid #00DDEB;
+
+}
+
+.btn-gamer {
+    background: #00DDEB;
+    border: none;
+    color: #1A1A1A;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 221, 235, 0.5);
+}
+
+    .btn-gamer:hover {
+        background: #E74C3C;
+        box-shadow: 0 0 20px rgba(231, 76, 60, 0.7);
+        transform: translateY(-2px);
+    }
+
+.text-neon {
+    color: #00DDEB;
+    text-shadow: 0 0 5px rgba(0, 221, 235, 0.5);
+}
+
+.text-danger {
+    color: #E74C3C !important;
+    text-shadow: 0 0 5px rgba(231, 76, 60, 0.3);
+}
+
+
+
+/* Estilo Gamer para Dashboard Admin */
+body.bg-gamer {
+    background: linear-gradient(135deg, #00DDEB 0%, #9B59B6 100%);
+    background-size: 200% 200%;
+    animation: gradientAnimation 10s ease infinite;
+    color: #ffffff;
+    font-family: 'Orbitron', sans-serif;
+}
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.card-gamer-admin {
+    background: rgba(26, 26, 26, 0.8);
+    border: 2px solid #00DDEB;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 221, 235, 0.5);
+    backdrop-filter: blur(5px);
+    width: 100%;
+    transition: transform 0.3s ease;
+}
+
+    .card-gamer-admin:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 30px rgba(0, 221, 235, 0.7);
+    }
+
+.btn-gamer-admin {
+    background: #00DDEB;
+    border: none;
+    color: #1A1A1A;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 221, 235, 0.5);
+}
+
+    .btn-gamer-admin:hover {
+        background: #E74C3C;
+        box-shadow: 0 0 20px rgba(231, 76, 60, 0.7);
+        transform: translateY(-2px);
+    }
+
+.btn-gamer-admin-secondary {
+    background: #5D6D7E;
+    border: none;
+    color: #ffffff;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(93, 109, 126, 0.5);
+}
+
+    .btn-gamer-admin-secondary:hover {
+        background: #E74C3C;
+        box-shadow: 0 0 15px rgba(231, 76, 60, 0.7);
+        transform: translateY(-2px);
+    }
+
+.btn-gamer-admin-warning {
+    background: #E67E22;
+    border: none;
+    color: #1A1A1A;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(230, 126, 34, 0.5);
+}
+
+    .btn-gamer-admin-warning:hover {
+        background: #E74C3C;
+        box-shadow: 0 0 15px rgba(231, 76, 60, 0.7);
+        transform: translateY(-2px);
+    }
+
+.text-neon-admin {
+    color: #00DDEB;
+    text-shadow: 0 0 5px rgba(0, 221, 235, 0.5);
+}
+
+.text-danger-admin {
+    color: #E74C3C !important;
+    text-shadow: 0 0 5px rgba(231, 76, 60, 0.3);
+}
+
+.text-warning-admin {
+    color: #E67E22 !important;
+    text-shadow: 0 0 5px rgba(230, 126, 34, 0.3);
+}
+
+
+
+
+/* Estilo Gamer para Formularios */
+.card-gamer-form {
+    background: rgba(26, 26, 26, 0.8);
+    border: 2px solid #00DDEB;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 221, 235, 0.5);
+    backdrop-filter: blur(5px);
+    width: 100%;
+    transition: transform 0.3s ease;
+}
+
+    .card-gamer-form:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 30px rgba(0, 221, 235, 0.7);
+    }
+
+.form-control-gamer {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #5D6D7E;
+    color: #ffffff;
+    font-family: 'Orbitron', sans-serif;
+    transition: all 0.3s ease;
+}
+
+    .form-control-gamer:focus {
+        border-color: #00DDEB;
+        box-shadow: 0 0 10px rgba(0, 221, 235, 0.7);
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+.btn-gamer {
+    background: #00DDEB;
+    border: none;
+    color: #1A1A1A;
+    font-weight: bold;
+    font-family: 'Orbitron', sans-serif;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 221, 235, 0.5);
+}
+
+    .btn-gamer:hover {
+        background: #E74C3C;
+        box-shadow: 0 0 20px rgba(231, 76, 60, 0.7);
+        transform: translateY(-2px);
+    }
+
+.text-danger-gamer {
+    color: #E74C3C !important;
+    text-shadow: 0 0 5px rgba(231, 76, 60, 0.3);
+}
+
+.card-wide {
+    background-color: #2a2a2a;
+    border: 1px solid #00ffcc;
+    box-shadow: 0 0 10px #00ffcc;
+    width: 100%;
+}

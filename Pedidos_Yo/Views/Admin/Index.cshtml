@@ -1,0 +1,107 @@
+﻿@model dynamic
+
+@{
+    ViewData["Title"] = "Dashboard Admin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h1 class="text-neon-admin text-center mb-4">Bienvenido, Administrador</h1>
+    <p class="text-white text-center mb-5">Panel de control para gestionar Pedidos_Yo</p>
+
+    <div class="row justify-content-center">
+        <!-- Tarjeta Usuarios -->
+        <div class="col-md-4 mb-4">
+            <div class="card card-gamer-admin">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-neon-admin">Usuarios</h5>
+                    <p class="card-text text-white">Total: @ViewBag.NumUsuarios</p>
+                    <a asp-controller="User" asp-action="Index" class="btn btn-gamer-admin">Gestionar Usuarios</a>
+                    <a asp-controller="User" asp-action="Create" class="btn btn-gamer-admin-secondary mt-2">Crear Usuario</a>
+                </div>
+            </div>
+        </div>
+        <!-- Tarjeta Productos -->
+        <div class="col-md-4 mb-4">
+            <div class="card card-gamer-admin">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-neon-admin">Productos</h5>
+                    <p class="card-text text-white">Total: @ViewBag.NumProductos</p>
+                    <p class="card-text text-danger-admin">Bajo stock: @ViewBag.ProductosBajoStock</p>
+                    <a asp-controller="Product" asp-action="Index" class="btn btn-gamer-admin">Gestionar Productos</a>
+                    <a asp-controller="Product" asp-action="Create" class="btn btn-gamer-admin-secondary mt-2">Crear Producto</a>
+                </div>
+            </div>
+        </div>
+        <!-- Tarjeta Pedidos -->
+        <div class="col-md-4 mb-4">
+            <div class="card card-gamer-admin">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-neon-admin">Pedidos</h5>
+                    <p class="card-text text-white">Total: @ViewBag.NumPedidos</p>
+                    <p class="card-text text-warning-admin">Pendientes: @ViewBag.PedidosPendientes</p>
+                    <a asp-controller="Order" asp-action="Index" class="btn btn-gamer-admin">Gestionar Pedidos</a>
+                    <a asp-action="PedidosPendientes" class="btn btn-gamer-admin-warning mt-2">Ver Pendientes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfico de Pedidos por Estado -->
+    <div class="row mt-5 justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card card-gamer-admin">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-neon-admin">Distribución de Pedidos</h5>
+                    <canvas id="pedidosChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('pedidosChart').getContext('2d');
+        const pedidosChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Pendiente', 'Procesado', 'Enviado', 'Entregado'],
+                datasets: [{
+                    label: 'Número de Pedidos',
+                    data: [@ViewBag.PedidosPendientes, @ViewBag.PedidosProcesados, @ViewBag.PedidosEnviados, @ViewBag.PedidosEntregados],
+                    backgroundColor: [
+                        'rgba(231, 76, 60, 0.5)',   // Rojo neón
+                        'rgba(0, 221, 235, 0.5)',   // Azul neón
+                        'rgba(155, 89, 182, 0.5)',  // Morado neón
+                        'rgba(46, 204, 113, 0.5)'   // Verde neón
+                    ],
+                    borderColor: [
+                        '#E74C3C',
+                        '#00DDEB',
+                        '#9B59B6',
+                        '#2ECC71'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#ffffff' }
+                    },
+                    x: {
+                        ticks: { color: '#ffffff' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: '#ffffff' }
+                    }
+                }
+            }
+        });
+    </script>
+}

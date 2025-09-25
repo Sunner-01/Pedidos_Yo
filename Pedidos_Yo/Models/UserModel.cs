@@ -26,7 +26,7 @@ namespace Pedidos_Yo.Models
         [RegularExpression("Admin|Cliente|Empleado", ErrorMessage = "El rol debe ser Admin, Cliente o Empleado.")]
         public string Rol { get; set; }
 
-        // Relación: Un usuario tiene muchos pedidos
+        // Un usuario tiene muchos pedidos
         public ICollection<OrderModel> Orders { get; set; } = new List<OrderModel>();
     }
 

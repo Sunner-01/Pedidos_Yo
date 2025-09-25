@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Pedidos_Yo.Models.OrderModel>
+
+@{
+    ViewData["Title"] = "Pedidos Pendientes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Pedidos Pendientes</h1>
+
+<div class="row">
+    <div class="col-md-12">
+        @if (Model.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Cliente?.Nombre</td>
+                            <td>@item.Fecha.ToString("dd/MM/yyyy")</td>
+                            <td>@item.Total</td>
+                            <td>@item.Estado</td>
+                            <td>
+                                <a asp-controller="Order" asp-action="Edit" asp-route-id="@item.Id">Editar</a>
+                                <a asp-controller="Order" asp-action="Details" asp-route-id="@item.Id">Detalles</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No hay pedidos pendientes.</p>
+        }
+    </div>
+</div>

@@ -21,7 +21,7 @@ namespace Pedidos_Yo.Models
         [Range(0, int.MaxValue, ErrorMessage = "El stock no puede ser negativo.")]
         public int Stock { get; set; }
 
-        // Relación: Un producto tiene muchos ítems de pedido
+        // Un producto tiene muchos ítems de pedido
         public ICollection<OrderItemModel> OrderItems { get; set; } = new List<OrderItemModel>();
     }
 

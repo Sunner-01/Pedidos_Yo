@@ -1,9 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Pedidos_Yo.Models;
-using Pedidos_Yo.Data;
+using MiWebSegurra.Models;
 
-namespace Pedidos_Yo.Controllers
+namespace MiWebSegurra.Controllers
 {
     public class HomeController : Controller
     {
